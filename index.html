@@ -302,8 +302,8 @@
     </a>
   </main>
 
-  <script>
-    // 1. Crear bombillos de la guirnalda según el ancho de pantalla
+   <script>
+    // 1. Crear bombillos de la guirnalda
     const guirnalda = document.getElementById('guirnalda');
     const cantidadLuces = Math.floor(window.innerWidth / 35);
     for (let i = 0; i < cantidadLuces; i++) {
@@ -311,12 +311,11 @@
       guirnalda.appendChild(li);
     }
 
-    // 2. Lógica de Cuenta Regresiva (31 de diciembre a las 23:59:59 o inicio del nuevo año)
+    // 2. Reloj de Cuenta Regresiva hacia el 1 de enero
     function actualizarContador() {
       const ahora = new Date();
-      const anioActual = ahora.getFullYear();
-      // Apunta al momento en que termina el 31 de diciembre (medianoche hacia el 1 de enero)
-      const fechaObjetivo = new Date(`January 1, ${anioActual + 1} 00:00:00`).getTime();
+      const anioSiguiente = ahora.getFullYear() + 1;
+      const fechaObjetivo = new Date(anioSiguiente, 0, 1, 0, 0, 0).getTime();
       const diferencia = fechaObjetivo - ahora.getTime();
 
       if (diferencia <= 0) {
@@ -324,7 +323,6 @@
         document.getElementById('horas').innerText = '00';
         document.getElementById('minutos').innerText = '00';
         document.getElementById('segundos').innerText = '00';
-        lanzarFuegoArtificial();
         return;
       }
 
@@ -333,10 +331,10 @@
       const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
       const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
 
-      document.getElementById('dias').innerText = dias.toString().padStart(2, '0');
-      document.getElementById('horas').innerText = horas.toString().padStart(2, '0');
-      document.getElementById('minutos').innerText = minutos.toString().padStart(2, '0');
-      document.getElementById('segundos').innerText = segundos.toString().padStart(2, '0');
+      document.getElementById('dias').innerText = String(dias).padStart(2, '0');
+      document.getElementById('horas').innerText = String(horas).padStart(2, '0');
+      document.getElementById('minutos').innerText = String(minutos).padStart(2, '0');
+      document.getElementById('segundos').innerText = String(segundos).padStart(2, '0');
     }
 
     setInterval(actualizarContador, 1000);
@@ -350,109 +348,121 @@
       "Al sonar las 12, mi mayor deseo es que nunca nos falte salud, amor y la dicha de seguir celebrando juntos. ¡Próspero Año Nuevo! 🎆",
       "Un año más que se va y otro que llega para escribir nuevas historias en familia. ¡Que la alegría de esta noche dure todo el año! 🥂",
       "Levanto mi copa por nuestra familia y amigos: que la unión, la prosperidad y las risas se multipliquen en este nuevo comienzo. 🎉"
-];
-let indiceMensaje = 0;
-function nuevoMensaje() {
-let nuevoIndice;
-do {
-nuevoIndice = Math.floor(Math.random() * mensajes.length);
-} while (nuevoIndice === indiceMensaje);
-indiceMensaje = nuevoIndice;
-document.getElementById('mensaje-actual').innerText = "${mensajes[indiceMensaje]}";
-}
-function copiarMensaje() {
-const texto = mensajes[indiceMensaje];
-navigator.clipboard.writeText(texto).then(() => {
-const btn = document.getElementById('btn-copiar');
-const textoOriginal = btn.innerText;
-btn.innerText = '✅ ¡Copiado!';
-setTimeout(() => { btn.innerText = textoOriginal; }, 2000);
-});
-}
-// 4. Configurar botón de WhatsApp con el enlace actual de Vercel
-const enlaceActual = window.location.href;
-const textoWhatsApp = encodeURIComponent(🎄✨ ¡Mira cuánto falta para recibir el año juntos! Entra aquí para ver la cuenta regresiva y sacar tu brindis de Fin de Año: ${enlaceActual});
-document.getElementById('btn-whatsapp').href = https://whatsapp.com{textoWhatsApp};
-// 5. Efectos visuales: Nieve + Fuegos Artificiales en Canvas
-const canvas = document.getElementById('canvas-efectos');
-const ctx = canvas.getContext('2d');
-let ancho = canvas.width = window.innerWidth;
-let alto = canvas.height = window.innerHeight;
-window.addEventListener('resize', () => {
-ancho = canvas.width = window.innerWidth;
-alto = canvas.height = window.innerHeight;
-});
-// Copos de nieve
-const copos = Array.from({ length: 80 }, () => ({
-x: Math.random() * ancho,
-y: Math.random() * alto,
-r: Math.random() * 3.5 + 1,
-d: Math.random() * 1 + 0.5
-}));
-// Partículas de fuegos artificiales
-let particulas = [];
-const coloresFuegos = ['#ff2a2a', '#2eff5b', '#ffffff', '#ffd700'];
-function lanzarFuegoArtificial() {
-const x = Math.random() * (ancho * 0.8) + (ancho * 0.1);
-const y = Math.random() * (alto * 0.45) + (alto * 0.1);
-const color = coloresFuegos[Math.floor(Math.random() * coloresFuegos.length)];
-for (let i = 0; i < 45; i++) {
-const angulo = (Math.PI * 2 * i) / 45;
-const velocidad = Math.random() * 4 + 1.5;
-particulas.push({
-x: x,
-y: y,
-vx: Math.cos(angulo) * velocidad,
-vy: Math.sin(angulo) * velocidad,
-alfa: 1,
-color: color
-});
-}
-}
-function lanzarMultiplesFuegos() {
-lanzarFuegoArtificial();
-setTimeout(lanzarFuegoArtificial, 300);
-setTimeout(lanzarFuegoArtificial, 600);
-}
-function animar() {
-ctx.clearRect(0, 0, ancho, alto);
-// Dibujar nieve
-ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-ctx.beginPath();
-for (let copo of copos) {
-ctx.moveTo(copo.x, copo.y);
-ctx.arc(copo.x, copo.y, copo.r, 0, Math.PI * 2);
-copo.y += copo.d;
-copo.x += Math.sin(copo.y * 0.01) * 0.5;
-if (copo.y > alto) {
-copo.y = -5;
-copo.x = Math.random() * ancho;
-}
-}
-ctx.fill();
-// Dibujar fuegos artificiales
-for (let i = particulas.length - 1; i >= 0; i--) {
-const p = particulas[i];
-p.x += p.vx;
-p.y += p.vy;
-p.vy += 0.05; // gravedad suave
-p.alfa -= 0.015;
-if (p.alfa <= 0) {
-particulas.splice(i, 1);
-} else {
-ctx.globalAlpha = p.alfa;
-ctx.fillStyle = p.color;
-ctx.beginPath();
-ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
-ctx.fill();
-}
-}
-ctx.globalAlpha = 1;
-requestAnimationFrame(animar);
-}
-animar();
-// Lanza un fuego artificial automático cada 4 segundos para ambientar
-setInterval(lanzarFuegoArtificial, 4000);
-      </script>
+    ];
+
+    let indiceMensaje = 0;
+
+    function nuevoMensaje() {
+      let nuevoIndice;
+      do {
+        nuevoIndice = Math.floor(Math.random() * mensajes.length);
+      } while (nuevoIndice === indiceMensaje);
+      indiceMensaje = nuevoIndice;
+      document.getElementById('mensaje-actual').innerText = `"${mensajes[indiceMensaje]}"`;
+    }
+
+    function copiarMensaje() {
+      const texto = mensajes[indiceMensaje];
+      navigator.clipboard.writeText(texto).then(() => {
+        const btn = document.getElementById('btn-copiar');
+        const textoOriginal = btn.innerText;
+        btn.innerText = '✅ ¡Copiado!';
+        setTimeout(() => { btn.innerText = textoOriginal; }, 2000);
+      });
+    }
+
+    // 4. Botón de WhatsApp
+    const enlaceActual = window.location.href;
+    const textoWhatsApp = encodeURIComponent("🎄✨ ¡Mira cuánto falta para recibir el año juntos! Entra aquí para ver la cuenta regresiva y sacar tu brindis de Fin de Año: " + enlaceActual);
+    document.getElementById('btn-whatsapp').href = "https://whatsapp.com" + textoWhatsApp;
+
+    // 5. Nieve y Fuegos Artificiales
+    const canvas = document.getElementById('canvas-efectos');
+    const ctx = canvas.getContext('2d');
+    let ancho = canvas.width = window.innerWidth;
+    let alto = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      ancho = canvas.width = window.innerWidth;
+      alto = canvas.height = window.innerHeight;
+    });
+
+    const copos = Array.from({ length: 80 }, () => ({
+      x: Math.random() * ancho,
+      y: Math.random() * alto,
+      r: Math.random() * 3.5 + 1,
+      d: Math.random() * 1 + 0.5
+    }));
+
+    let particulas = [];
+    const coloresFuegos = ['#ff2a2a', '#2eff5b', '#ffffff', '#ffd700'];
+
+    function lanzarFuegoArtificial() {
+      const x = Math.random() * (ancho * 0.8) + (ancho * 0.1);
+      const y = Math.random() * (alto * 0.45) + (alto * 0.1);
+      const color = coloresFuegos[Math.floor(Math.random() * coloresFuegos.length)];
+
+      for (let i = 0; i < 45; i++) {
+        const angulo = (Math.PI * 2 * i) / 45;
+        const velocidad = Math.random() * 4 + 1.5;
+        particulas.push({
+          x: x,
+          y: y,
+          vx: Math.cos(angulo) * velocidad,
+          vy: Math.sin(angulo) * velocidad,
+          alfa: 1,
+          color: color
+        });
+      }
+    }
+
+    function lanzarMultiplesFuegos() {
+      lanzarFuegoArtificial();
+      setTimeout(lanzarFuegoArtificial, 300);
+      setTimeout(lanzarFuegoArtificial, 600);
+    }
+
+    function animar() {
+      ctx.clearRect(0, 0, ancho, alto);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.beginPath();
+      for (let copo of copos) {
+        ctx.moveTo(copo.x, copo.y);
+        ctx.arc(copo.x, copo.y, copo.r, 0, Math.PI * 2);
+        copo.y += copo.d;
+        copo.x += Math.sin(copo.y * 0.01) * 0.5;
+        if (copo.y > alto) {
+          copo.y = -5;
+          copo.x = Math.random() * ancho;
+        }
+      }
+      ctx.fill();
+
+      for (let i = particulas.length - 1; i >= 0; i--) {
+        const p = particulas[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05;
+        p.alfa -= 0.015;
+
+        if (p.alfa <= 0) {
+          particulas.splice(i, 1);
+        } else {
+          ctx.globalAlpha = p.alfa;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      ctx.globalAlpha = 1;
+
+      requestAnimationFrame(animar);
+    }
+
+    animar();
+    setInterval(lanzarFuegoArtificial, 4000);
+  </script>
 </body>
 </html>
