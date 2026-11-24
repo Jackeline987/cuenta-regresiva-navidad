@@ -296,10 +296,11 @@
     <!-- Botón de fuegos artificiales de prueba -->
     <button class="btn-fuegos" onclick="lanzarMultiplesFuegos()">🎆 ¡Lanzar fuegos artificiales!</button>
 
-    <!-- Compartir página en WhatsApp -->
-    <a href="#" class="btn-whatsapp" id="btn-whatsapp" target="_blank" rel="noopener">
+      <!-- Compartir página en WhatsApp -->
+    <button class="btn-whatsapp" id="btn-whatsapp" onclick="compartirWhatsApp()">
       📲 Compartir esta cuenta regresiva por WhatsApp
-    </a>
+    </button>
+
   </main>
 
    <script>
@@ -371,10 +372,34 @@
       });
     }
 
-    // 4. Botón de WhatsApp
-    const enlaceActual = window.location.href;
-    const textoWhatsApp = encodeURIComponent("🎄✨ ¡Mira cuánto falta para recibir el año juntos! Entra aquí para ver la cuenta regresiva y sacar tu brindis de Fin de Año: " + enlaceActual);
-    document.getElementById('btn-whatsapp').href = "https://whatsapp.com" + textoWhatsApp;
+      // 4. Botón de WhatsApp inteligente (nativo en celular + alternativa en PC)
+    async function compartirWhatsApp() {
+      const enlaceActual = window.location.href;
+      const mensaje = "🎄✨ ¡Mira cuánto falta para recibir el año juntos! Entra aquí para ver la cuenta regresiva y sacar tu brindis de Fin de Año:\n" + enlaceActual;
+
+      // Si estás en el teléfono, abre el menú nativo directo a WhatsApp
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'Cuenta Regresiva Fin de Año',
+            text: mensaje
+          });
+          return;
+        } catch (err) {
+          // Si el usuario cancela, no hace nada
+          return;
+        }
+      }
+
+      // Si estás en PC, copia el mensaje con el enlace y abre wa.me
+      navigator.clipboard.writeText(mensaje);
+      const btn = document.getElementById('btn-whatsapp');
+      btn.innerText = '✅ ¡Enlace copiado! Abriendo WhatsApp...';
+      setTimeout(() => {
+        btn.innerText = '📲 Compartir esta cuenta regresiva por WhatsApp';
+      }, 3000);
+      window.open("https://wa.me" + encodeURIComponent(mensaje), "_blank");
+    }
 
     // 5. Nieve y Fuegos Artificiales
     const canvas = document.getElementById('canvas-efectos');
