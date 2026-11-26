@@ -45,54 +45,28 @@
     }
 
     /* Guirnalda de luces superiores */
-    .luces {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      display: flex;
-      justify-content: space-around;
-      padding: 10px 0;
-      z-index: 10;
-      list-style: none;
-      border-top: 4px solid #0a2e1f;
-    }
-
-    .luces li {
-      width: 14px;
-      height: 22px;
-      border-radius: 50%;
-      position: relative;
-      animation: parpadeo 1.5s infinite alternate;
-    }
-
-    .luces li::before {
-      content: '';
-      position: absolute;
-      top: -6px;
-      left: 3px;
-      width: 8px;
-      height: 6px;
-      background: #222;
-      border-radius: 2px;
-    }
-
-    .luces li:nth-child(3n+1) {
-      background: #ff2a2a;
-      box-shadow: 0 4px 18px #ff2a2a;
+    .luces li:nth-child(4n+1) {
+      background: #ffea00;
+      box-shadow: 0 4px 18px #ffea00;
       animation-delay: 0s;
     }
 
-    .luces li:nth-child(3n+2) {
-      background: #2eff5b;
-      box-shadow: 0 4px 18px #2eff5b;
-      animation-delay: 0.5s;
+    .luces li:nth-child(4n+2) {
+      background: #00b0ff;
+      box-shadow: 0 4px 18px #00b0ff;
+      animation-delay: 0.4s;
     }
 
-    .luces li:nth-child(3n+3) {
-      background: #ffffff;
-      box-shadow: 0 4px 18px #ffffff;
-      animation-delay: 1s;
+    .luces li:nth-child(4n+3) {
+      background: #ff2a2a;
+      box-shadow: 0 4px 18px #ff2a2a;
+      animation-delay: 0.8s;
+    }
+
+    .luces li:nth-child(4n+4) {
+      background: #2eff5b;
+      box-shadow: 0 4px 18px #2eff5b;
+      animation-delay: 1.2s;
     }
 
     @keyframes parpadeo {
